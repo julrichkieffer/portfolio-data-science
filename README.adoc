@@ -1,3 +1,4 @@
 = Data Science Portfolio
 
-More to come...
+.  2019 sales analysis
+.  link:/02%20staff%20churn/README.md[Staff churn prediction] (ML Zoomcamp Mid-term Project)
