@@ -1,4 +1,4 @@
-# Staff Churn Predicion
+# Staff Churn Prediction
 Machine Learning (ML) Zoomcamp Mid-term Project
 
 
@@ -17,3 +17,9 @@ The value of such an innovation would be measured in both the attraction, retent
 
 After all, people are not data.  But data, here, could perhaps predict the behaviour of one's staff. And that alone, is the art-of-the-possible intended here.
 
+## Objective
+
+1.  Consider traits and insights that can be gleaned from the dataset to guide / understand the impacts on employees.
+1.  Targeting the `Attrition` feature, build a machine learning model to predict whether a given employee is likely to churn
+1.  Rank features that promote or reduce the likelihood of churn
+1.  "Operationalise" the machine learning model by wrapping it in an API, itself wrapped into a Docker container
