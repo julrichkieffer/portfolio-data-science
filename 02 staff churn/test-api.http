@@ -15,7 +15,6 @@ POST {{baseUrl}}/predict
 Content-Type: application/json
 
 {
-    "age": 72,
     "business_travel": "Frequent Traveller",
     "department": "Human Resources",
     "education_field": "Business Studies",
@@ -25,7 +24,12 @@ Content-Type: application/json
     "job_satisfaction_level": 1,
     "manager_rating_level": 4,
     "marital_status": "Single",
-    "over_time": 1
+    "over_time": 1,
+    "relationship_satisfaction_level": 3,
+    "self_rating_level": 5,
+    "state": "CA",
+    "work_life_balance_level": 3,
+    "years_since_hire": 10
 }
 
 ### TEST Validation Fail
@@ -33,7 +37,7 @@ POST {{baseUrl}}/predict
 Content-Type: application/json
 
 {
-    "marital_status": "<invalid>"
+    "state": "<invalid>"
 }
 
 ### TEST discrete
@@ -41,7 +45,7 @@ POST {{baseUrl}}/predict
 Content-Type: application/json
 
 {
-    "over_time": 0
+    "state": "CA"
 }
 
 

@@ -41,22 +41,46 @@ class PredictRequest(BaseModel):
     age: Optional[int] = Field(default=0, gt=0, lt=120, examples=[49])
     business_travel: Optional[str] = None
     department: Optional[str] = None
-    distance_from_home_km: Optional[float] = Field(default=0, gt=0, examples=[49])
+    distance_from_home_km: Optional[float] = Field(default=0, ge=0, examples=[49])
     education_field: Optional[str] = None
-    education_level: Optional[int | str] = Field(default=0, gt=0, lt=6, examples=[4])
+    education_level: Optional[int | str] = Field(default=0, ge=0, le=5, examples=[4])
     environment_satisfaction_level: Optional[int | str] = Field(
-        default="Not Answered", gt=0, lt=6, examples=[4]
+        default="Not Answered", ge=1, le=5, examples=[4]
     )
     ethnicity: Optional[str] = None
     gender: Optional[str] = None
     job_satisfaction_level: Optional[int | str] = Field(
-        default="Not Answered", gt=0, lt=6, examples=[4]
+        default="Not Answered", ge=1, le=5, examples=[4]
     )
     manager_rating_level: Optional[int | str] = Field(
-        default="Not Answered", gt=0, lt=6, examples=[4]
+        default="Not Answered", ge=1, le=5, examples=[4]
     )
     marital_status: Optional[str] = None
-    over_time: Optional[int] = Field(default=0, gt=-1, lt=2, examples=[1])
+    over_time: Optional[int] = Field(default=0, ge=0, le=1, examples=[1])
+    relationship_satisfaction_level: Optional[int | str] = Field(
+        default="Not Answered", ge=1, le=5, examples=[4]
+    )
+    self_rating_level: Optional[int | str] = Field(
+        default="Not Answered", ge=1, le=5, examples=[4]
+    )
+    state: Optional[str] = None
+    stock_option_level: Optional[int] = Field(default=0, ge=0, le=3, examples=[1])
+    training_opportunities_taken: Optional[int] = Field(default=0, ge=0, examples=[1])
+    training_opportunities_within_year: Optional[int] = Field(
+        default=0, ge=0, examples=[3]
+    )
+    work_life_balance_level: Optional[int | str] = Field(
+        default="Not Answered", ge=1, le=5, examples=[4]
+    )
+    years_at_company: Optional[int] = Field(default=0, ge=0, le=80, examples=[9])
+    years_in_most_recent_role: Optional[int] = Field(
+        default=0, ge=0, le=80, examples=[9]
+    )
+    years_since_hire: Optional[int] = Field(default=0, ge=0, le=80, examples=[9])
+    years_since_last_promotion: Optional[int] = Field(
+        default=0, ge=0, le=80, examples=[9]
+    )
+    years_with_curr_manager: Optional[int] = Field(default=0, ge=0, le=80, examples=[9])
 
     @classmethod
     def validate_empty_or_one_of(
@@ -72,7 +96,7 @@ class PredictRequest(BaseModel):
             "1 Unacceptable",
             "2 Needs Improvement",
             "3 Meets Expectation",
-            "4 Exceeds Expectation ",
+            "4 Exceeds Expectation",
             "5 Above and Beyond",
         ]
         if val is None:
@@ -91,7 +115,7 @@ class PredictRequest(BaseModel):
             "1 Very Dissatisfied",
             "2 Dissatisfied",
             "3 Neutral",
-            "4 Satisfied ",
+            "4 Satisfied",
             "5 Very Satisfied",
         ]
         if val is None:
@@ -105,7 +129,7 @@ class PredictRequest(BaseModel):
 
     @field_validator("business_travel")
     def validate_business_travel(cls, val: Optional[str] = None):
-        allowed = ["Frequent Traveller", "No Travel ", "No Travel", "Some Travel"]
+        allowed = ["Frequent Traveller", "No Travel", "Some Travel"]
         return cls.validate_empty_or_one_of(allowed, val)
 
     @field_validator("department")
@@ -132,9 +156,9 @@ class PredictRequest(BaseModel):
         allowed = [
             "",
             "1 No Formal Qualifications",
-            "2 High School ",
+            "2 High School",
             "3 Bachelors ",
-            "4 Masters ",
+            "4 Masters",
             "5 Doctorate",
         ]
         if val is None:
@@ -157,7 +181,7 @@ class PredictRequest(BaseModel):
             "Asian or Asian American",
             "Black or African American",
             "Mixed or multiple ethnic groups",
-            "Native Hawaiian ",
+            "Native Hawaiian",
             "Other ",
             "White",
         ]
@@ -180,6 +204,23 @@ class PredictRequest(BaseModel):
     def validate_marital_status(cls, val: Optional[str] = None):
         allowed = ["Divorced", "Married", "Single"]
         return cls.validate_empty_or_one_of(allowed, val)
+
+    @field_validator("relationship_satisfaction_level")
+    def validate_relationship_satisfaction_level(cls, val: Optional[int | str] = None):
+        return cls.validate_satisfaction_level(val)
+
+    @field_validator("self_rating_level")
+    def validate_self_rating_level(cls, val: Optional[int | str] = None):
+        return cls.validate_rating_level(val)
+
+    @field_validator("state")
+    def validate_state(cls, val: Optional[str] = None):
+        allowed = ["CA", "IL", "NY"]
+        return cls.validate_empty_or_one_of(allowed, val)
+
+    @field_validator("work_life_balance_level")
+    def validate_work_life_balance_level(cls, val: Optional[int | str] = None):
+        return cls.validate_satisfaction_level(val)
 
     # @field_validator("department")
     # def validate_department(cls, val: Optional[str] = None):
