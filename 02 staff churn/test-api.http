@@ -10,28 +10,6 @@
 {{baseUrl}}/weights/
 
 
-### HIGH probability of churn (staff will)
-POST {{baseUrl}}/predict
-Content-Type: application/json
-
-{
-    "business_travel": "Frequent Traveller",
-    "department": "Human Resources",
-    "education_field": "Business Studies",
-    "education_level": 5,
-    "environment_satisfaction_level": 5,
-    "ethnicity": "Black or African American",
-    "job_satisfaction_level": 1,
-    "manager_rating_level": 4,
-    "marital_status": "Single",
-    "over_time": 1,
-    "relationship_satisfaction_level": 3,
-    "self_rating_level": 5,
-    "state": "CA",
-    "work_life_balance_level": 3,
-    "years_since_hire": 10
-}
-
 ### TEST Validation Fail
 POST {{baseUrl}}/predict
 Content-Type: application/json
@@ -56,21 +34,50 @@ Content-Type: application/json
 {}
 
 
-#
-#
-#
-#
-#
-#
-#
-#
+### HIGH probability of churn (staff will)
+POST {{baseUrl}}/predict
+Content-Type: application/json
+
+{
+    "business_travel": "Frequent Traveller",
+    "department": "Human Resources",
+    "education_field": "Business Studies",
+    "education_level": 3,
+    "environment_satisfaction_level": 4,
+    "ethnicity": "Black or African American",
+    "job_satisfaction_level": 1,
+    "manager_rating_level": 3,
+    "marital_status": "Single",
+    "over_time": 1,
+    "relationship_satisfaction_level": 4,
+    "self_rating_level": 3,
+    "state": "CA",
+    "work_life_balance_level": 3
+}
 
 ### POSITIVE decision of churn (staff will)
 POST {{baseUrl}}/decide
 Content-Type: application/json
 
 {
-    "age": 72
+    "age": 49,
+    "business_travel": "Some Travel",
+    "distance_from_home_km": 30,
+    "department": "Human Resources",
+    "education_field": "Human Resources",
+    "education_level": 3,
+    "environment_satisfaction_level": 4,
+    "ethnicity": "Black or African American",
+    "gender": "Male",
+    "job_satisfaction_level": 4,
+    "manager_rating_level": 4,
+    "marital_status": "Divorced",
+    "relationship_satisfaction_level": 3,
+    "self_rating_level": 4,
+    "state": "IL",
+    "training_opportunities_taken": 0,
+    "training_opportunities_within_year": 1,
+    "work_life_balance_level": 3
 }
 
 
@@ -79,69 +86,58 @@ POST {{baseUrl}}/decide?threshold=0.8
 Content-Type: application/json
 
 {
-    "age": 72
+    "age": 49,
+    "business_travel": "Some Travel",
+    "distance_from_home_km": 30,
+    "department": "Human Resources",
+    "education_field": "Human Resources",
+    "education_level": 3,
+    "environment_satisfaction_level": 4,
+    "ethnicity": "Black or African American",
+    "gender": "Male",
+    "job_satisfaction_level": 4,
+    "manager_rating_level": 4,
+    "marital_status": "Divorced",
+    "relationship_satisfaction_level": 3,
+    "self_rating_level": 4,
+    "state": "IL",
+    "training_opportunities_taken": 0,
+    "training_opportunities_within_year": 1,
+    "work_life_balance_level": 3
 }
 
-
-### CUSTOM threshold for decision of churn
-POST {{baseUrl}}/decide?threshold=0.8
-Content-Type: application/json
-
-{
-    "age": 72
-}
-
-#
-#
-#
-#
-#
-#
-#
 
 ### LOW probability of churn (customer won't)
 POST {{baseUrl}}/predict
 Content-Type: application/json
 
 {
-    "age": 57,
-    "job": "blue-collar",
-    "marital": "married",
-    "education": "primary",
-    "balance": 856,
-    "housing": "no",
-    "contact": "cellular",
-    "day": 11,
-    "month": "aug",
-    "duration": 194,
-    "campaign": 6,
-    "pdays": -1,
-    "previous": 0,
-    "poutcome": "unknown"
+    "age": 34,
+    "business_travel": "No Travel",
+    "department": "Technology",
+    "distance_from_home_km": 13,
+    "education_field": "Technical Degree",
+    "education_level": 0,
+    "environment_satisfaction_level": 4,
+    "ethnicity": "White",
+    "gender": "Male",
+    "job_satisfaction_level": 4,
+    "manager_rating_level": 4,
+    "marital_status": "Married",
+    "over_time": 0,
+    "relationship_satisfaction_level": 4,
+    "self_rating_level": 4,
+    "state": "IL",
+    "stock_option_level": 0,
+    "training_opportunities_taken": 0,
+    "training_opportunities_within_year": 0,
+    "work_life_balance_level": 4,
+    "years_at_company": 2,
+    "years_in_most_recent_role": 0,
+    "years_since_hire": 2,
+    "years_since_last_promotion": 0,
+    "years_with_curr_manager": 0
 }
-
-
-### HIGH probability of churn (customer will)
-POST {{baseUrl}}/predict
-Content-Type: application/json
-
-{
-    "age": 72,
-    "job": "retired",
-    "marital": "married",
-    "education": "primary",
-    "balance": 5816,
-    "housing": "no",
-    "contact": "cellular",
-    "day": 11,
-    "month": "aug",
-    "duration": 1144,
-    "campaign": 5,
-    "pdays": 184,
-    "previous": 3,
-    "poutcome": "unknown"
-}
-
 
 
 ### NEGATIVE decision of churn (customer won't)
@@ -149,62 +145,29 @@ POST {{baseUrl}}/decide
 Content-Type: application/json
 
 {
-    "age": 57,
-    "job": "blue-collar",
-    "marital": "married",
-    "education": "primary",
-    "balance": 856,
-    "housing": "no",
-    "contact": "cellular",
-    "day": 11,
-    "month": "aug",
-    "duration": 194,
-    "campaign": 6,
-    "pdays": -1,
-    "previous": 0,
-    "poutcome": "unknown"
-}
-
-
-### POSITIVE decision of churn (customer will)
-POST {{baseUrl}}/decide
-Content-Type: application/json
-
-{
-    "age": 72,
-    "job": "retired",
-    "marital": "married",
-    "education": "primary",
-    "balance": 5816,
-    "housing": "no",
-    "contact": "cellular",
-    "day": 11,
-    "month": "aug",
-    "duration": 1144,
-    "campaign": 5,
-    "pdays": 184,
-    "previous": 3,
-    "poutcome": "unknown"
-}
-
-
-### CUSTOM threshold for decision of churn
-POST {{baseUrl}}/decide?threshold=0.8
-Content-Type: application/json
-
-{
-    "age": 72,
-    "job": "retired",
-    "marital": "married",
-    "education": "primary",
-    "balance": 5816,
-    "housing": "no",
-    "contact": "cellular",
-    "day": 11,
-    "month": "aug",
-    "duration": 1144,
-    "campaign": 5,
-    "pdays": 184,
-    "previous": 3,
-    "poutcome": "unknown"
+    "age": 34,
+    "business_travel": "No Travel",
+    "department": "Technology",
+    "distance_from_home_km": 13,
+    "education_field": "Technical Degree",
+    "education_level": 0,
+    "environment_satisfaction_level": 4,
+    "ethnicity": "White",
+    "gender": "Male",
+    "job_satisfaction_level": 4,
+    "manager_rating_level": 4,
+    "marital_status": "Married",
+    "over_time": 0,
+    "relationship_satisfaction_level": 4,
+    "self_rating_level": 4,
+    "state": "IL",
+    "stock_option_level": 0,
+    "training_opportunities_taken": 0,
+    "training_opportunities_within_year": 0,
+    "work_life_balance_level": 4,
+    "years_at_company": 2,
+    "years_in_most_recent_role": 0,
+    "years_since_hire": 2,
+    "years_since_last_promotion": 0,
+    "years_with_curr_manager": 0
 }
