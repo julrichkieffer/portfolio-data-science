@@ -1,0 +1,1 @@
+docker build -t zoomcamp-mid-term-project .
