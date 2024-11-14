@@ -209,6 +209,23 @@ def prepare_training_data() -> pd.DataFrame:
         ],
     )
 
+    # Remove whitespace in source data
+
+    for df in [dfEducation, dfSatisfied, dfRating]:
+        df.level = df.level.str.strip()
+
+    for col in [
+        "business_travel",
+        "department",
+        "education_field",
+        "ethnicity",
+        "gender",
+        "marital_status",
+        "job_role",
+        "state",
+    ]:
+        dfEmployee[col] = dfEmployee[col].str.strip()
+
     # Join most-recent Performance data per `employee_id` to Employee data
 
     dfPerformance.review_date = pd.to_datetime(
