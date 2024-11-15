@@ -1,1 +1,1 @@
-docker build -t zoomcamp-mid-term-project .
+docker build -t staff-churn-prediction .
