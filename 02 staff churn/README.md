@@ -19,24 +19,196 @@ After all, people are not data.  But data, here, could perhaps predict the behav
 
 ## Objectives
 
-1. [ ] Consider traits and insights that can be gleaned from the dataset to guide / understand the impacts on employees.
-1. [x] Targeting the `Attrition` feature, build a machine learning model to predict whether a given employee is likely to churn
-1. [x] Rank features that promote or reduce the likelihood of churn
-1. [x] "Operationalise" the machine learning model by wrapping it in an API, itself wrapped into a Docker container
+- [x] Consider traits and insights that can be gleaned from the dataset to guide / understand the impacts on employees.
+- [x] Targeting the `Attrition` feature, build a machine learning model to predict whether a given employee is likely to churn
+- [x] Rank features that promote or reduce the likelihood of churn
+- [x] "Operationalise" the machine learning model by wrapping it in an API, itself wrapped into a Docker container to create a microservice that can be used directly from any application that supports REST integration
+- [x] Document findings, ML model design and selection, the API, and Docker container
+
+## Data Analysis
+
+## Machine Learning
 
 
-<details>
+## Local Development
 
-<summary>Tips for collapsed sections</summary>
+Although VSCode and Python 3.11+ is recommended for local development, any IDE will suffice but is treated as out-of-scope / for the reader. 
 
-### You can add a header
+However, to setup a local development environment:
 
-You can add text within a collapsed section. 
+1.  Download or clone the source code from [here](https://github.com/julrichkieffer/portfolio-data-science)
+1.  Open a terminal / Powershell / command prompt, and navigate to the directory containing the source code
+1.  Execute the following to download and install `pipenv`, a Python virtual environment:
 
-You can add an image or a code block, too.
+    ```bash
+    pip install pipenv
+    ```
 
-```ruby
-   puts "Hello World"
-```
+    <details>
 
-</details>
+    <summary>If the above command fails...</summary>
+
+    If the above command fails, try the following in order:
+
+    ```bash
+    python3 -m pip install pipenv
+    ```
+
+    or on Linux / Mac only:
+
+    ```bash
+    sudo pip install pipenv
+    ```
+
+    or on Linux / Mac only:
+
+    ```bash
+    sudo python3 -m pip install pipenv
+    ```
+
+    </details>
+
+1.  Execute the following command to create a Python virtual environment, and to download and install the necessary components:
+
+    ```bash
+    pipenv install
+    ```
+
+    <details>
+
+    <summary>If the above command fails...</summary>
+
+    If the above command fails, try the following in order:
+
+    ```bash
+    python3 -m pipenv install
+    ```
+
+    or on Linux / Mac only:
+
+    ```bash
+    sudo pipenv install
+    ```
+
+    or on Linux / Mac only:
+
+    ```bash
+    sudo python3 -m pipenv install
+    ```
+
+    </details>
+
+1.  To run the API via the Python virtual environment, execute the following command:
+
+    ```bash
+    pipenv run fastapi dev churn_api.py
+    ```
+
+    <details>
+
+    <summary>If the above command fails...</summary>
+
+    If the above command fails, try the following in order:
+
+    ```bash
+    python3 -m pipenv run fastapi dev churn_api.py
+    ```
+
+    or on Linux / Mac only:
+
+    ```bash
+    sudo pipenv run fastapi dev churn_api.py
+    ```
+
+    or on Linux / Mac only:
+
+    ```bash
+    sudo python3 -m pipenv run fastapi dev churn_api.py
+    ```
+
+    </details>
+
+
+If successful, you should see the terminal / Powershell / command prompt messages similar to:
+
+![API running in local development using a Python virtual environment](./assets/running-dev.jpg)
+
+
+## Docker Container (Production)
+
+Docker is chosen as it's without doubt the most popular containerisation technology at the time of writing. However, there's no impediment to adopting another.  These instructions assume Docker Desktop or a similar installation of the Docker daemon.
+
+### Building a Docker image
+
+To build a Docker image of this solution -- API wrapped around the Machine Learning model:
+
+1.  Download or clone the source code from [here](https://github.com/julrichkieffer/portfolio-data-science)
+1.  Open a terminal / Powershell / command prompt, and navigate to the directory containing the source code
+1.  Execute the following to build a local container image:
+
+    ```bash
+    docker build -t staff-churn-prediction .
+    ```
+
+    <details>
+
+    <summary>Notes on the above command</summary>
+
+    -  `docker build` is the base command for Docker to build an image
+    -  `-t staff-churn-prediction` although tagging is recommended, the tag itself (`staff-churn-prediction` here) can be changed. If you do, ensure your run command (below) uses the same tag
+    -  `.` is short-hand for the current directory. This assumes the source code is downloaded in the current directory, but can be replaced with a relative or absolute path to the source code instead
+
+    </details>
+
+**NOTE:** Building an image is typically only done once, or should a source code update demand a re-run of the the build command.
+
+### Running the Docker image
+
+Once a local image is built, it can be run several times without rebuilding the image again:
+
+1.  Open a terminal / Powershell / command prompt
+
+1.  Execute the following to run the local container image:
+
+    ```bash
+    docker run -it --rm -p 8000:8000 staff-churn-prediction
+    ```
+
+    <details>
+
+    <summary>Notes on the above command</summary>
+
+    -  `docker run` is the base command for Docker to run an image
+    -  `staff-churn-prediction` although the tag itself (`staff-churn-prediction` here) can be changed (see above), this tells Docker which image to run
+    -  `-p 8000:8000` as the API is a web endpoint it is available on a port, here `8000` in the running Docker container.  However, to make this endpoint available to other running applications (like a web browser), the API endpoint is mapped to a machine port, here `8000` too.  
+    
+        **NOTE:** Changing the machine port to the default port of `80` will mean all internet access is suspended while this Docker container is running.
+
+        **NOTE:** As a local port is mapped to the API in the running container, only 1 instance can be running at the same time. If more than once instance of the API is sought, change the machine port per instance be varying the above run command. For example:
+
+        ```bash
+        docker run -it --rm -p 7999:8000 staff-churn-prediction
+        ```
+
+    - `-it --rm` tells Docker to start the image in interactive terminal (`-it`) mode, allowing keyboard commands to also pass through to the Docker container. And once stopped, `--rm` tells Docker to immediately remove the container. By default, Docker retains all instances of container runs.
+
+        **NOTE:**  To stop the running container, from the terminal / Powershell / command prompt, send <kbd>Ctrl + C</kbd> (Linux, Windows) or <kbd>&#8984; + C</kbd> (Mac).
+
+    </details>
+
+If successful, you should see the terminal / Powershell / command prompt messages similar to:
+
+![Example running Docker image with API messages](./assets/running-docker.jpg)
+
+
+## Application Programming Interface (API)
+
+The Machine Learning model is wrapped by an application programming interface (API). Once a local Docker container is built and running, documentation of this API is available from the running Docker container [here](http://127.0.0.1:8000/docs).
+
+You should see an internet brower window / tab similar to:
+
+![Example API documentation](./assets/running-docs.jpg)
+
+And, depending on availability of VSCode, appropriate extensions, and your familiarity with executing HTTP commands, the source code also contains examples of all API endpoint output variations in `./test-api.http`:
+
+![Example VSCode API testing commands](./assets/running-api.jpg)
