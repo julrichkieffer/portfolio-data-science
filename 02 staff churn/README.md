@@ -27,7 +27,23 @@ After all, people are not data.  But data, here, could perhaps predict the behav
 
 ## Data Analysis
 
+A variety univariate and bivariate data analysis is demonstrated within the Jupyter Notebook [here](./notebook.ipynb), and illustrated, for example, with plots like:
+
+![Example data analysis plot](./assets/example-plot.png)
+
+**NOTE:** While many combinations of features would typically be contrasted to realise insights from the data, as marking criteria for this project draws focus to the target feature (`attrition`) only, this typical analysis is deferred as the effort would, in effect, realise no value. 
+
 ## Machine Learning
+
+Using a variety of feature selection and model tuning parameters, the outcomes of the following machine learning model types was compared with a baseline accuracy of 77% (ROC AUC metric):
+
+- Logistic Regression
+- Random Forest
+- Gradient Boosting
+
+While tuned results achieved remarkably good, yet consistent, accuracy circa 97% across all 3 model types, as recall was best in the tuned Logistic Regression model, it was selected for API and "containerisation" under this proof of the art of the possible. See below.
+
+All results from training, feature selection and model tuning is available [here](./notebook.ipynb#modelling).
 
 
 ## Local Development
@@ -46,7 +62,7 @@ However, to setup a local development environment:
 
     <details>
 
-    <summary>If the above command fails...</summary>
+    <summary>Notes on the above command</summary>
 
     If the above command fails, try the following in order:
 
@@ -71,29 +87,29 @@ However, to setup a local development environment:
 1.  Execute the following command to create a Python virtual environment, and to download and install the necessary components:
 
     ```bash
-    pipenv install
+    pipenv install --dev
     ```
 
     <details>
 
-    <summary>If the above command fails...</summary>
+    <summary>Notes on the above command</summary>
 
     If the above command fails, try the following in order:
 
     ```bash
-    python3 -m pipenv install
+    python3 -m pipenv install --dev
     ```
 
     or on Linux / Mac only:
 
     ```bash
-    sudo pipenv install
+    sudo pipenv install --dev
     ```
 
     or on Linux / Mac only:
 
     ```bash
-    sudo python3 -m pipenv install
+    sudo python3 -m pipenv install --dev
     ```
 
     </details>
@@ -106,7 +122,7 @@ However, to setup a local development environment:
 
     <details>
 
-    <summary>If the above command fails...</summary>
+    <summary>Notes on the above command</summary>
 
     If the above command fails, try the following in order:
 
