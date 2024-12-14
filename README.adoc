@@ -1,4 +1,8 @@
 = Data Science Portfolio
 
-.  2019 sales analysis
+.  link:pass:[/01%202019-sales/analysis.ipynb][Sales analysis]
 .  link:pass:[/02 staff churn/README.md][Staff churn prediction] (ML Zoomcamp Mid-term Project)
+
+1. https://github.com/julrichkieffer/portfolio-data-science/blob/dev/[FY2019 Sales Analysis and Insight]
+
+More to come...
