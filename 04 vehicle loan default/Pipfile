@@ -1,0 +1,25 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+fastapi = {extras = ["standard"], version = "*"}
+numpy = "*"
+pandas = "*"
+pydantic = "*"
+rich = {extras = ["jupyter"], version = "*"}
+scikit-learn = "==1.4.0"
+
+[dev-packages]
+ipython = "*"
+ipywidgets = "*"
+liac-arff = "*"
+matplotlib = "*"
+scipy = "*"
+seaborn = "*"
+tqdm = "*"
+xgboost = "*"
+
+[requires]
+python_version = "3.11"
