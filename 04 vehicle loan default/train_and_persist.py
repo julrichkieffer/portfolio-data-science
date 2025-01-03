@@ -4,17 +4,8 @@ from rich.jupyter import print
 import numpy as np
 import pandas as pd
 
-# from sklearn.feature_selection import mutual_info_classif, SelectKBest, RFE #, SelectPercentile
-# from sklearn.feature_extraction import DictVectorizer
-# from sklearn.metrics import RocCurveDisplay, PrecisionRecallDisplay, roc_auc_score, f1_score #, accuracy_score, roc_curve, root_mean_squared_error, mutual_info_score, auc, plot_confusion_matrix
-from sklearn.preprocessing import StandardScaler  # , OneHotEncoder
-from sklearn.model_selection import (
-    train_test_split,
-)  # , KFold, GridSearchCV, RandomizedSearchCV
-
-# from sklearn.linear_model import LogisticRegression, LinearRegression #, SGDClassifier
-# from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor, export_text #, export_graphviz, plot_tree
-# from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor #, GradientBoostingClassifier
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
 
 import re
 from itertools import combinations
@@ -386,12 +377,12 @@ def top_n_encoder(series: pd.Series, top_n: int = 10) -> pd.DataFrame:
         return pd.DataFrame(series, index=series.index)
 
 
-def main():
+def prepare_training_data(raw_file: str) -> pd.DataFrame:
     # from scipy.io import arff   # FAILED as "NotImplementedError: String attributes not supported yet"
     import arff
 
     print("Loading raw data...")
-    raw = arff.load(open("./data/LT-Vehicle-Loan-Default-Prediction.arff", "r"))
+    raw = arff.load(open(raw_file, "r"))
     print("Raw data loaded.")
 
     # print(raw.keys())
@@ -415,15 +406,10 @@ def main():
         # .pipe(memory_consumption_of)
     )
 
-    del arff, raw, columns
-    # del df_raw, df_cleaned
-
     # dfLoans.head().T
     # dfLoans.describe(include='all').T
     # dfLoans.info()
-
-    seed = 42
-    target_feature = "loan_default"
+    # display(dfLoans_processed.describe(include="all").T)
 
     features_not_compatible_with_modelling = [
         "date_of_birth",
@@ -438,8 +424,6 @@ def main():
         "employment_type": lambda _: top_n_encoder(_, 2),
         "perform_cns_score_description": lambda _: top_n_encoder(_),
     }
-
-    print(f"{target_feature} == 1:  {dfLoans[target_feature].mean():.1%}")
 
     features_calculated_as_insignificant = [
         "mobileno_avl_flag",
@@ -474,7 +458,16 @@ def main():
     )
     print("Data prepared for training.")
 
-    # display(dfLoans_processed.describe(include="all").T)
+    return dfLoans_processed
+
+
+def train_model(
+    dfLoans_processed: pd.DataFrame,
+    target_feature: str,
+    seed: int,
+    tuning: Dict[str, Dict[str, float]],
+):
+    print(f"{target_feature} == 1:  {dfLoans_processed[target_feature].mean():.1%}")
 
     print("Training model...")
 
@@ -484,16 +477,7 @@ def main():
     df_test, y_test = y_split(df_test, yColumn=target_feature)
     df_full, y_full = y_split(df_full, yColumn=target_feature)
 
-    best_tuning = {  # tuning results
-        "xgboost": {
-            "eta": 0.25,
-            "scale_pos_weight": 2.0,
-            "max_depth": 5.0,
-            "n_estimators": 69.0,
-        }
-    }
-
-    eta, scale_pos_weight, max_depth, n_estimators = best_tuning["xgboost"].values()
+    eta, scale_pos_weight, max_depth, n_estimators = tuning["xgboost"].values()
 
     model = xgb.XGBClassifier(
         objective="binary:logistic",
@@ -514,8 +498,29 @@ def main():
     print(f"    test data score: { model.score(df_test, y_test):.2%}")
     print("XGBoost model trained.")
 
+    return model
+
+
+def main():
+    seed = 42
+    target_feature = "loan_default"
+    best_tuning = {  # tuning results
+        "xgboost": {
+            "eta": 0.25,
+            "scale_pos_weight": 2.0,
+            "max_depth": 5.0,
+            "n_estimators": 69.0,
+        }
+    }
+
+    dfLoans_processed = prepare_training_data(
+        "./data/LT-Vehicle-Loan-Default-Prediction.arff"
+    )
+
+    model = train_model(dfLoans_processed, target_feature, seed, best_tuning)
+
     print("Persisting model...")
-    model_pickle = "./models/xgboost.model"
+    model_pickle = "./models/xgboost.model.bin"
     with open(model_pickle, "wb") as f_out:
         pickle.dump(model, f_out)
     print(f"XGBoost model saved to {model_pickle}")
