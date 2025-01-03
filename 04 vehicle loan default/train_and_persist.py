@@ -520,7 +520,7 @@ def main():
     model = train_model(dfLoans_processed, target_feature, seed, best_tuning)
 
     print("Persisting model...")
-    model_pickle = "./models/xgboost.model.bin"
+    model_pickle = "./models/loan-default.model.bin"
     with open(model_pickle, "wb") as f_out:
         pickle.dump(model, f_out)
     print(f"XGBoost model saved to {model_pickle}")
