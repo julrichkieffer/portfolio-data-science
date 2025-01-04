@@ -1,0 +1,122 @@
+@baseUrl = http://127.0.0.1:8000
+
+# https://kenslearningcurve.com/tutorials/test-an-api-by-using-http-files-in-vscode/
+
+### GET root / index
+{{baseUrl}}/
+
+
+### GET feature weights
+{{baseUrl}}/weights/
+
+
+### TEST empty
+POST {{baseUrl}}/predict
+Content-Type: application/json
+
+{}
+
+
+### TEST unknown categorical values
+POST {{baseUrl}}/predict
+Content-Type: application/json
+
+{
+    "unique_id": "384672",
+    "disbursal_date": "23-03-98",
+    "disbursed_amount": 435899.98,
+    "asset_cost": 535899.98,
+    "ltv": 83,
+    "branch_id": "42342",
+    "supplier_id": "2342",
+    "manufacturer_id": "223",
+    "current_pincode_id": "3643",
+    "state_id": "34",
+    "employee_code_id": "1003",
+    "perform_cns_score": 636,
+    "pri_no_of_accts": 3,
+    "pri_active_accts": 3,
+    "pri_overdue_accts": 3,
+    "pri_current_balance": 335899.98,
+    "pri_sanctioned_amount": 259899.98,
+    "pri_disbursed_amount": 3,
+    "primary_instal_amt": 3,
+    "new_accts_in_last_six_months": 3,
+    "delinquent_accts_in_last_six_months": 3,
+    "average_acct_age": "0yrs 9mon",
+    "credit_history_length": "12yrs 11mon",
+    "no_of_inquiries": 3,
+    "date_of_birth": "23-03-68",
+    "employment_type": "<unknown>",
+    "perform_cns_score_description": "<unknown>"
+}
+
+
+### HIGH probability of default (loan will)
+POST {{baseUrl}}/predict
+Content-Type: application/json
+
+{
+    "unique_id": "384672",
+    "disbursal_date": "23-03-98",
+    "disbursed_amount": 435899.98,
+    "asset_cost": 535899.98,
+    "ltv": 83,
+    "branch_id": "42342",
+    "supplier_id": "2342",
+    "manufacturer_id": "223",
+    "current_pincode_id": "3643",
+    "state_id": "34",
+    "employee_code_id": "1003",
+    "perform_cns_score": 636,
+    "pri_no_of_accts": 3,
+    "pri_active_accts": 3,
+    "pri_overdue_accts": 3,
+    "pri_current_balance": 335899.98,
+    "pri_sanctioned_amount": 259899.98,
+    "pri_disbursed_amount": 3,
+    "primary_instal_amt": 3,
+    "new_accts_in_last_six_months": 3,
+    "delinquent_accts_in_last_six_months": 3,
+    "average_acct_age": "0yrs 9mon",
+    "credit_history_length": "12yrs 11mon",
+    "no_of_inquiries": 3,
+    "date_of_birth": "23-03-68",
+    "employment_type": "self employed",
+    "perform_cns_score_description": "low"
+}
+
+
+### LOW probability of default (loan won't)
+POST {{baseUrl}}/predict
+Content-Type: application/json
+
+{
+    "unique_id": "384672",
+    "disbursal_date": "23-03-98",
+    "disbursed_amount": 435899.98,
+    "asset_cost": 535899.98,
+    "ltv": 83,
+    "branch_id": "42342",
+    "supplier_id": "2342",
+    "manufacturer_id": "223",
+    "current_pincode_id": "3643",
+    "state_id": "34",
+    "employee_code_id": "1003",
+    "perform_cns_score": 636,
+    "pri_no_of_accts": 3,
+    "pri_active_accts": 3,
+    "pri_overdue_accts": 3,
+    "pri_current_balance": 335899.98,
+    "pri_sanctioned_amount": 259899.98,
+    "pri_disbursed_amount": 3,
+    "primary_instal_amt": 3,
+    "new_accts_in_last_six_months": 3,
+    "delinquent_accts_in_last_six_months": 3,
+    "average_acct_age": "0yrs 9mon",
+    "credit_history_length": "12yrs 11mon",
+    "no_of_inquiries": 3,
+    "date_of_birth": "23-03-68",
+    "employment_type": "self employed",
+    "perform_cns_score_description": "very low"
+}
