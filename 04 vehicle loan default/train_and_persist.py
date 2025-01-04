@@ -1,5 +1,8 @@
+import pickle
 from IPython.display import display
-from rich.jupyter import print
+from typing import Iterable, Optional, Dict, Callable
+import re
+from rich import print
 
 import numpy as np
 import pandas as pd
@@ -7,15 +10,7 @@ import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 
-import re
-from itertools import combinations
-from typing import Iterable, TypeVar, Optional, Dict, Callable
-
-from tqdm.auto import tqdm
-
 import xgboost as xgb
-
-import pickle
 
 
 strip_whitespace = lambda val: val.strip() if type(val) is str else val
@@ -211,10 +206,27 @@ def clean_from_raw(dataframe: pd.DataFrame) -> pd.DataFrame:
         )
         .assign(
             date_of_birth=lambda _: fix_raw_date(_.date_of_birth),
-            employment_type=lambda _: _.employment_type.str.lower(),
+            employment_type=lambda _: pd.Series(
+                pd.Categorical(
+                    _.employment_type.str.lower(),
+                    categories=["self employed", "salaried"],
+                )
+            ),
             disbursal_date=lambda _: fix_raw_date(_.disbursal_date),
-            perform_cns_score_description=lambda _: fix_raw_risk(
-                _.perform_cns_score_description
+            perform_cns_score_description=lambda _: pd.Series(
+                pd.Categorical(
+                    fix_raw_risk(_.perform_cns_score_description),
+                    categories=[
+                        "not scored",
+                        "no history",
+                        "very low",
+                        "low",
+                        "medium",
+                        "high",
+                        "very high",
+                    ],
+                    ordered=True,
+                )
             ),
             average_acct_age=lambda _: fix_raw_timedelta(_.average_acct_age),
             credit_history_length=lambda _: fix_raw_timedelta(_.credit_history_length),
@@ -267,26 +279,12 @@ def clean_from_raw(dataframe: pd.DataFrame) -> pd.DataFrame:
                     for col in [
                         "branch_id",
                         "manufacturer_id",
-                        "employment_type",
+                        # "employment_type",
                         "state_id",
-                        "perform_cns_score_description",
+                        # "perform_cns_score_description",
                     ]
                 },
             }
-        )
-        .assign(
-            perform_cns_score_description=lambda _: _.perform_cns_score_description.cat.reorder_categories(
-                [
-                    "not scored",
-                    "no history",
-                    "very low",
-                    "low",
-                    "medium",
-                    "high",
-                    "very high",
-                ],
-                ordered=True,
-            )
         )
     )
 
@@ -377,6 +375,42 @@ def top_n_encoder(series: pd.Series, top_n: int = 10) -> pd.DataFrame:
         return pd.DataFrame(series, index=series.index)
 
 
+features_not_compatible_with_modelling = [
+    "date_of_birth",
+    "date_of_birth_yq",
+    "date_of_birth_ym",
+    "disbursal_date",
+    "disbursal_date_yq",
+    "disbursal_date_ym",
+]
+
+features_to_transform = {
+    "employment_type": lambda _: top_n_encoder(_, 2),
+    "perform_cns_score_description": lambda _: top_n_encoder(_),
+}
+
+features_calculated_as_insignificant = [
+    "mobileno_avl_flag",
+    "aadhar_flag",
+    "pan_flag",
+    "voterid_flag",
+    "driving_flag",
+    "passport_flag",
+    # 'pri_active_accts',
+    "sec_no_of_accts",
+    "sec_active_accts",
+    "sec_overdue_accts",
+    "sec_instal_amt",
+    "date_of_birth_quarter",
+    "date_of_birth_is_weekend",
+    "disbursal_date_year",
+    "disbursal_date_is_weekend",
+    "sec_current_balance",
+    "sec_sanctioned_amount",
+    "sec_disbursed_amount",
+]
+
+
 def prepare_training_data(raw_file: str) -> pd.DataFrame:
     # from scipy.io import arff   # FAILED as "NotImplementedError: String attributes not supported yet"
     import arff
@@ -410,41 +444,6 @@ def prepare_training_data(raw_file: str) -> pd.DataFrame:
     # dfLoans.describe(include='all').T
     # dfLoans.info()
     # display(dfLoans_processed.describe(include="all").T)
-
-    features_not_compatible_with_modelling = [
-        "date_of_birth",
-        "date_of_birth_yq",
-        "date_of_birth_ym",
-        "disbursal_date",
-        "disbursal_date_yq",
-        "disbursal_date_ym",
-    ]
-
-    features_to_transform = {
-        "employment_type": lambda _: top_n_encoder(_, 2),
-        "perform_cns_score_description": lambda _: top_n_encoder(_),
-    }
-
-    features_calculated_as_insignificant = [
-        "mobileno_avl_flag",
-        "aadhar_flag",
-        "pan_flag",
-        "voterid_flag",
-        "driving_flag",
-        "passport_flag",
-        # 'pri_active_accts',
-        "sec_no_of_accts",
-        "sec_active_accts",
-        "sec_overdue_accts",
-        "sec_instal_amt",
-        "date_of_birth_quarter",
-        "date_of_birth_is_weekend",
-        "disbursal_date_year",
-        "disbursal_date_is_weekend",
-        "sec_current_balance",
-        "sec_sanctioned_amount",
-        "sec_disbursed_amount",
-    ]
 
     dfLoans_processed = (
         dfLoans
