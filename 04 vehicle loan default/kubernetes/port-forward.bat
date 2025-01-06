@@ -1,0 +1,1 @@
+@kubectl port-forward service/lb-loan-default-prediction 8000:80 --context kind-capstone-1

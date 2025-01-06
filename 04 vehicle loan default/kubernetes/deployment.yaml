@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loan-default-prediction
+spec:
+  selector:
+    matchLabels:
+      app: loan-default-prediction
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: loan-default-prediction
+    spec:
+      containers:
+        - name: loan-default-prediction
+          image: loan-default-prediction:capstone-1
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "500Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 8000
