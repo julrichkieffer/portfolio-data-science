@@ -1,0 +1,1 @@
+docker build -t loan-default-prediction:capstone-1 .
