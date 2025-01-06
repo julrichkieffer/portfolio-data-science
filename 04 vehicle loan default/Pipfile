@@ -10,6 +10,7 @@ pandas = "*"
 pydantic = "*"
 rich = {extras = ["jupyter"], version = "*"}
 scikit-learn = "==1.4.0"
+xgboost = "*"
 
 [dev-packages]
 ipython = "*"
@@ -19,7 +20,6 @@ matplotlib = "*"
 scipy = "*"
 seaborn = "*"
 tqdm = "*"
-xgboost = "*"
 
 [requires]
 python_version = "3.11"
