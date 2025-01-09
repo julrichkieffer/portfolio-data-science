@@ -505,10 +505,10 @@ def main():
     target_feature = "loan_default"
     best_tuning = {  # tuning results
         "xgboost": {
-            "eta": 0.25,
+            "eta": 0.3667,
             "scale_pos_weight": 2.0,
             "max_depth": 5.0,
-            "n_estimators": 69.0,
+            "n_estimators": 55.0,
         }
     }
 
