@@ -29,25 +29,15 @@ A variety univariate and bivariate data analysis is demonstrated within the Jupy
 
 ## Machine Learning
 
-
-
-
-
-
-Using a variety of feature selection and model tuning parameters, the outcomes of the following machine learning model types were compared with a baseline accuracy of 77% (ROC AUC metric):
+Using a variety of feature selection and model tuning parameters, the outcomes of the following machine learning model types were compared with a baseline accuracy of 51.6% (ROC AUC metric):
 
 - Decision Tree
 - Random Forest
 - Gradient Boosting
 
+While tuned results achieved some improvement while avoiding overfitting, none of the approaches were remarkable.  Of the set, a tuned XGBoost model was selected for API and "containerisation" under this proof of the art of the possible. See below.
 
-
-
-
-
-While tuned results achieved remarkably good, yet consistent, accuracy circa 97% across all 3 model types, as recall was best in the tuned Logistic Regression model, it was selected for API and "containerisation" under this proof of the art of the possible. See below.
-
-All results from training, feature selection and model tuning is available [here](./notebook.ipynb#modelling).
+All results from training, feature selection and model tuning is available [here](./notebook.ipynb#modelling).  However, another round of tuning &mdash; perhaps using automation rather than hard-coded values &mdash; would return improved accuracy.
 
 
 ## Local Development
@@ -388,6 +378,9 @@ This maps the local port 8000 to the default web (HTTP traffic) port 80 of the c
 ```powershell
 $env:FOO='BAR'; .\myscript; $env:FOO=$null
 ```
+
+https://github.com/renatopp/liac-arff
+https://github.com/haloboy777/arfftocsv/blob/master/arffToCsv.py
 https://github.com/abduliante/vehicle-default-loan-prediction/blob/main/notebooks/04_Finding_best_parameters_using_gridsearch.ipynb
 https://github.com/arifanony/arifanony-L-T-Vehicle-Loan-Default-Prediction/tree/master
 
