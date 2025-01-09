@@ -388,6 +388,8 @@ This maps the local port 8000 to the default web (HTTP traffic) port 80 of the c
 ```powershell
 $env:FOO='BAR'; .\myscript; $env:FOO=$null
 ```
+https://github.com/abduliante/vehicle-default-loan-prediction/blob/main/notebooks/04_Finding_best_parameters_using_gridsearch.ipynb
+https://github.com/arifanony/arifanony-L-T-Vehicle-Loan-Default-Prediction/tree/master
 
 business overview / existing contracts insights
 
